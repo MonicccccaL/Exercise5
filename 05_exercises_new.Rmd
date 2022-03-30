@@ -34,6 +34,7 @@ library(transformr)    # for "tweening" (gganimate)
 library(gifski)        # need the library for creating gifs but don't need to load each time
 library(shiny)         # for creating interactive apps
 library(ggimage)
+library(babynames)
 theme_set(theme_minimal())
 ```
 
@@ -84,9 +85,60 @@ Once your repository is created, you should always open your **project** rather 
 
   1. Choose 2 graphs you have created for ANY assignment in this class and add interactivity using the `ggplotly()` function.
   
-
+```{r}
+babynames %>% 
+  group_by(sex, year) %>% 
+  mutate(has2000 = n > 2000)
+prop_babynames <- babynames %>% 
+  mutate(has2000 = ifelse(babynames$n > 2000, 1, 0)) %>% 
+  group_by(sex, year) %>% 
+  summarize(proportion = sum(has2000)/n())
+p <- prop_babynames %>% 
+  ggplot(aes(x = year, y = proportion, color = sex)) +
+  geom_line() +
+  labs(x = "Year", y = "Proportion of names",
+       title = "Proportion of Names with More than 2000 Babies")+
+  theme_bw() +
+  theme(plot.title = element_text(hjust = 0.5,
+                                  face = "bold",
+                                  size = 15),
+        axis.text = element_text(size=10),
+        axis.text.x = element_text(hjust = 1, vjust = 1),
+        axis.text.y = element_text(hjust = 1, vjust = 1))
+ggplotly(p)
+```
   
   2. Use animation to tell an interesting story with the `small_trains` dataset that contains data from the SNCF (National Society of French Railways). These are Tidy Tuesday data! Read more about it [here](https://github.com/rfordatascience/tidytuesday/tree/master/data/2019/2019-02-26).
+
+```{r}
+late_trains <- small_trains %>%
+  filter(year %in% c("2017", "2018", "2019"),
+    departure_station %in% c("PARIS LYON", "PARIS MONTPARNASSE", "POITIERS")) %>%
+  mutate(date = make_date(year, month)) %>% 
+  group_by(date, departure_station) %>%
+  summarise(num_late = sum(num_arriving_late)) %>%
+  mutate(cum_num_late = cumsum(num_late))
+late_trains %>%
+  ggplot(aes(x = date, y = cum_num_late, color = departure_station))+
+  geom_line()+
+  geom_point()+
+  geom_text(aes(label = departure_station)) +
+  labs(title = "Number of Trips from each Station",
+       subtitle = "Date: {frame_along}",
+       x = "",
+       y = "",
+       color = "departure station") +
+  scale_color_manual(values = c("PARIS LYON" = "darkred",
+                       "PARIS MONTPARNASSE" = "springgreen4",
+                       "POITIERS" = "darksalmon")) +
+  theme(legend.position = "none") +
+  transition_reveal(date)
+anim_save("late_train.gif")
+```
+
+```{r}
+knitr::include_graphics("late_train.gif")
+```
 
 
 ## Garden data
@@ -107,9 +159,9 @@ garden_harvest %>%
            date, 
            fill = list(daily_harvest_lb = 0)) %>% 
   mutate(variety = fct_reorder(variety, 
-                               daily_harvest_lb, 
-                               sum, 
-                               .desc = FALSE)) %>%
+                               daily_harvest_lb,
+                               .desc = FALSE, 
+                               sum)) %>%
   group_by(variety) %>% 
   mutate(cum_harvest_lb = cumsum(daily_harvest_lb)) %>% 
   ggplot(aes(x = date, y = cum_harvest_lb, fill = variety)) +
@@ -125,6 +177,9 @@ garden_harvest %>%
   theme(legend.position = "none") +
   transition_reveal(date) 
 anim_save("tomatoes.gif")
+```
+
+```{r}
 knitr::include_graphics("tomatoes.gif")
 ```
 
@@ -164,6 +219,9 @@ ggmap(mallorca_map) +
   transition_reveal(along = time)
 
 anim_save("bike_trip.gif")
+```
+
+```{r}
 knitr::include_graphics("bike_trip.gif")
 ```
   
@@ -202,6 +260,9 @@ ggmap(panama_map) +
   transition_reveal(along = time)
 
 anim_save("heather_trip.gif")
+```
+
+```{r}
 knitr::include_graphics("heather_trip.gif")
 ```
   
@@ -251,6 +312,9 @@ covid_anim <- covid19 %>%
 
 animate(covid_anim, nframes = 200, end_pause = 10)
 anim_save("covid_anim_map.gif")
+```
+
+```{r}
 knitr::include_graphics("covid_anim_map.gif")
 ```
 
