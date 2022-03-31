@@ -16,49 +16,37 @@ output:
 ```
 
 ```{r libraries}
-library(tidyverse)     # for data cleaning and plotting
-library(gardenR)       # for Lisa's garden data
-library(lubridate)     # for date manipulation
-library(openintro)     # for the abbr2state() function
-library(palmerpenguins)# for Palmer penguin data
-library(maps)          # for map data
-library(ggmap)         # for mapping points on maps
-library(gplots)        # for col2hex() function
-library(RColorBrewer)  # for color palettes
-library(sf)            # for working with spatial data
-library(leaflet)       # for highly customizable mapping
-library(ggthemes)      # for more themes (including theme_map())
-library(plotly)        # for the ggplotly() - basic interactivity
-library(gganimate)     # for adding animation layers to ggplots
-library(transformr)    # for "tweening" (gganimate)
-library(gifski)        # need the library for creating gifs but don't need to load each time
-library(shiny)         # for creating interactive apps
+library(tidyverse)     
+library(gardenR)      
+library(lubridate)     
+library(openintro)     
+library(palmerpenguins)
+library(maps)         
+library(ggmap)        
+library(gplots)        
+library(RColorBrewer)  
+library(sf)            
+library(leaflet)       
+library(ggthemes)      
+library(plotly)       
+library(gganimate)     
+library(transformr)    
+library(gifski)       
+library(shiny)        
 library(ggimage)
 library(babynames)
 theme_set(theme_minimal())
 ```
 
 ```{r data}
-# SNCF Train data
 small_trains <- read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-02-26/small_trains.csv") 
-
-# Lisa's garden data
 data("garden_harvest")
-
-# Lisa's Mallorca cycling data
 mallorca_bike_day7 <- read_csv("https://www.dropbox.com/s/zc6jan4ltmjtvy0/mallorca_bike_day7.csv?dl=1") %>% 
   select(1:4, speed)
-
-# Heather Lendway's Ironman 70.3 Pan Am championships Panama data
 panama_swim <- read_csv("https://raw.githubusercontent.com/llendway/gps-data/master/data/panama_swim_20160131.csv")
-
 panama_bike <- read_csv("https://raw.githubusercontent.com/llendway/gps-data/master/data/panama_bike_20160131.csv")
-
 panama_run <- read_csv("https://raw.githubusercontent.com/llendway/gps-data/master/data/panama_run_20160131.csv")
-
-#COVID-19 data from the New York Times
 covid19 <- read_csv("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv")
-
 ```
 
 ## Put your homework on GitHub!
@@ -322,11 +310,12 @@ knitr::include_graphics("covid_anim_map.gif")
 
   7. This app will also use the COVID data. Make sure you load that data and all the libraries you need in the `app.R` file you create. You should create a new project for the app, separate from the homework project. Below, you will post a link to the app that you publish on shinyapps.io. You will create an app to compare states' daily number of COVID cases per 100,000 over time. The x-axis will be date. You will have an input box where the user can choose which states to compare (`selectInput()`), a slider where the user can choose the date range, and a submit button to click once the user has chosen all states they're interested in comparing. The graph should display a different line for each state, with labels either on the graph or in a legend. Color can be used if needed. 
   
-Put the link to your app here: 
+Put the link to your app here: https://monicali.shinyapps.io/covid_19_shiny_app/
   
 ## GitHub link
 
   8. Below, provide a link to your GitHub repo with this set of Weekly Exercises. 
-
+  
+https://github.com/MonicccccaL/Exercise5
 
 **DID YOU REMEMBER TO UNCOMMENT THE OPTIONS AT THE TOP?**
